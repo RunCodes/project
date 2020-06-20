@@ -2,75 +2,60 @@
 
 namespace app\admin\controller;
 
-use app\admin\Controller;
+use think\Controller;
 use think\Config;
 use think\Db;
 use think\Model;
 
+use  order\src\MarketplaceWebServiceOrders\Client;
+
+
 class Index extends Controller{
-	
 
-	 /*  
-     * url:访问路径  
-     * array:要传递的数组  
-     * */  
-    public static function index(){  
-  	
-    	$url = "http://www.tp.com/index.php/admin/index/ps";
-    	$insert = ['name'=>'15914510579','pwd'=>'123456'];
-    	Db::name('user')->insert($insert);
 
-        $array = ['name'=>Db::name('user')->getLastSql()];
+    public  function index(){
 
-        $curl = curl_init();  
-        //设置提交的url  
-        curl_setopt($curl, CURLOPT_URL, $url);  
-        //设置头文件的信息作为数据流输出  
-        curl_setopt($curl, CURLOPT_HEADER, 0);  
-        //设置获取的信息以文件流的形式返回，而不是直接输出。  
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);  
-        //设置post方式提交  
-        curl_setopt($curl, CURLOPT_POST, 1);  
-        //设置post数据  
-        $post_data = $array;  
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);  
-        //执行命令  
-        $data = curl_exec($curl);  
-        //关闭URL请求  
-        curl_close($curl);  
-       //获得数据并返回  
-       echo json_encode($data);die;
+
+    	vendor('order.src.MarketplaceWebServiceOrders.Client');
+    	$logistics = new \MarketplaceWebServiceOrders_Client('AKIAJ5AC6CAJBSQJZYXA','yShNDF4ZL2dFsyaX7RRIFjqk+H67U9A/fCTlKrNS','Amazon Sellercentral Manager','1.0');
+
+    	 $res = $logistics->listOrders([
+    		'MarketplaceId'=>'ATVPDKIKX0DER',
+    		'serviceUrl'=>"https://mws.amazonservices.com/Orders/2013-09-01",
+    		'CreatedAfter'=>'2020-06-01',
+    		'SellerId'=>'ACN2V0SCDZRHS',
+    		'MWSAuthToken'=>'amzn.mws.e0b964ae-8583-2d38-8a9b-e5f8e3250fb5',
+    		'AWSAccessKeyId'=>'AKIAJ5AC6CAJBSQJZYXA',
+    		'SecretKey'=>'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',
+    		'timestamp'=>gmdate("Y-m-d\TH:i:s\Z"),
+    	]);
+
+    	echo json_encode($res);die;
+
+
+    // 	https://mws.amazonservices.jp/Orders/2013-09-01
+  		// ?AWSAccessKeyId=0PB842EXAMPLE7N4ZTR2
+  		// &Action=ListOrders
+  		// &MWSAuthToken=amzn.mws.4ea38b7b-f563-7709-4bae-87aeaEXAMPLE
+  		// &MarketplaceId.Id.1=A1VC38T7YXB528
+  		// &FulfillmentChannel.Channel.1=MFN
+  		// &PaymentMethod.1=COD
+  		// &PaymentMethod.2=Other
+  		// &OrderStatus.Status.1=Unshipped
+  		// &OrderStatus.Status.2=PendingAvailability
+  		// &SellerId=A2NEXAMPLETF53
+  		// &Signature=ZQLpf8vEXAMPLE0iC265pf18n0%3D
+  		// &SignatureVersion=2
+  		// &SignatureMethod=HmacSHA256
+  		// &LastUpdatedAfter=2013-08-01T18%3A12%3A21
+  		// &Timestamp=2013-09-05T18%3A12%3A21.687Z
+  		// &Version=2013-09-01
+
+    	// $logistics->invokeListOrders();
+
+
+    
     }  
-
-
-
-
-
-    public function ps(){
-
-
-    	$redis = new \Redis();
-
-    	if($_POST){
-    		
-			$res = Db::execute($_POST['name']);
-
-			if($res){
-    			echo json_encode(['code'=>0]);
-
-		    }else{
-    			echo json_encode(['code'=>1]);
-
-		    }
-    	}
-
-    	exit;
-    }
-
-
-
-
-
 
 
 }
