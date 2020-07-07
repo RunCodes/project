@@ -251,4 +251,12 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+
+    'redis' =>[
+        'host'=>'127.0.0.1',
+        'port'=>6379,
+        'pwd'=>''
+
+
+    ]
 ];

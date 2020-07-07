@@ -11,6 +11,8 @@
 
 // 应用公共文件
 
+use think\Config;
+
 /**
  * 生成文件
  * @param $fileName  文件名称
@@ -39,4 +41,18 @@ function download($filename){
       header('Content-Disposition: attachment; filename="' . $filename . '"'); 
       readfile("$filename"); 
     } 
+}
+
+/**
+ * 返回redis实例
+ */
+function getRedis(){
+  static $redis;
+  if($redis){
+    return $redis;
+  }else{
+    $redis = new \Redis();
+    $redis->connect(Config::get('redis.host'),Config::get('redis.port') );
+    return $redis;
+  }
 }

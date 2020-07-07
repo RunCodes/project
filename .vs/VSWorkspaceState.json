@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\application",
+    "\\application\\admin",
+    "\\application\\admin\\controller",
+    "\\extend",
+    "\\public",
+    "\\public\\static"
+  ],
+  "SelectedNode": "\\application\\admin\\controller\\VerificationCode.php",
+  "PreviewInSolutionExplorer": false
+}
